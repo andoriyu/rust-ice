@@ -1,0 +1,11 @@
+[package]
+name = "coordinator-server"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+sqlx = { version = "0.6", features = ["runtime-tokio-native-tls", "sqlite", "migrate", "chrono"] }
+sumkin = { git = "https://github.com/andoriyu/sumkin.git" }
+coordinator_entity = { path = "../coordinator-entity" }

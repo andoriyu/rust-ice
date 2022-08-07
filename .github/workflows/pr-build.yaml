@@ -1,0 +1,35 @@
+---
+name: Rust checks
+on:
+  push:
+jobs:
+  run-rustfmt-and-clippy-nightly:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/checkout@v2
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          profile: minimal
+          override: true
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v1
+        with:
+          cache-on-failure: true
+      - uses: LoliGothick/rustfmt-check@v0.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions-rs/clippy-check@v1
+        env:
+          DATABASE_URL: sqlite:///home/runner/work/control-plane/control-plane/coordinator/sqlx-support.db
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: "clippy-nightly"
+          args: --all-targets -- -D clippy::suspicious -D clippy::perf

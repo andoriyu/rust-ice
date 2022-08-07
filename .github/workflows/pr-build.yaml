@@ -20,6 +20,7 @@ jobs:
           profile: minimal
           override: true
           components: rustfmt, clippy
+      - run: rustc --version --verbose
       - uses: Swatinem/rust-cache@v1
         with:
           cache-on-failure: true
